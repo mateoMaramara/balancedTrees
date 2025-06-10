@@ -187,23 +187,28 @@ class RBTree:
                 current = current.right
         return succ.value if succ else None
 
+#helper function to split sentences into words by space
 def get_words(text):
     return text.lower().split()
 
-spanish_index = {}
-english_index = {}
+# Indexes to store individual words and their corresponding sayings
+index_span = {} #maps each spanish word to the Saying objects with that word
+index_eng = {} #maps each english word to the Saying objects with that word
 
-def index_saying(saying):
-    for word in get_words(saying.spanish):
-        spanish_index.setdefault(word, []).append(saying)
-    for word in get_words(saying.english):
-        english_index.setdefault(word, []).append(saying)
-# returns 
+#function to actually index the sayings
+def indexSaying(saying):
+    for word in get_words(saying.spanish): # for each word in the sentence
+        index_span.setdefault(word, []).append(saying) #map to the list of sayings
+    for word in get_words(saying.english): # Same logic for english words
+        index_eng.setdefault(word, []).append(saying)
+
+# returns all sayings that contain the chosen Spanish word
 def MeHua(word):
-    return spanish_index.get(word.lower(), [])
+    return index_span.get(word.lower(), [])
 
+#returns all sayings that contain the chosen English word
 def WithWord(word):
-    return english_index.get(word.lower(), [])
+    return index_eng.get(word.lower(), [])
 
 #for test cases here is a list of spanish sayings with their english translations
 if __name__ == "__main__":
@@ -226,7 +231,7 @@ if __name__ == "__main__":
 # test cases
     for s in sayings:
         tree.insert(s.spanish, s)
-        index_saying(s)
+        indexSaying(s)
 
     print("Get function:")
     print(tree.get("Ojos que no ven, corazón que no siente"))
