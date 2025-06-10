@@ -190,7 +190,10 @@ class RBTree:
 
 # helper function to break text into lowercase words
 def getWords(text):
-    return text.lower().split()
+    punct = "'.,'"
+    text = text.lower().translate(str.maketrans('', '', punct))
+    return text.split()
+
 
 # Indexes to store individual words and their corresponding sayings
 index_span = {} #maps each spanish word to the Saying objects with that word
