@@ -189,26 +189,28 @@ class RBTree:
         return succ.value if succ else None
 
 # helper function to break text into lowercase words
-def get_words(text):
+def getWords(text):
     return text.lower().split()
 
-spanish_index = {} # dictionary to store spanish word -> sayings
-english_index = {} # dictionary to store english word -> sayings
+# Indexes to store individual words and their corresponding sayings
+index_span = {} #maps each spanish word to the Saying objects with that word
+index_eng = {} #maps each english word to the Saying objects with that word
 
 # adds words from saying to the index for fast word-based lookup
-def index_saying(saying):
-    for word in get_words(saying.spanish):
-        spanish_index.setdefault(word, []).append(saying)
-    for word in get_words(saying.english):
-        english_index.setdefault(word, []).append(saying)
+def indexSaying(saying):
+    for word in getWords(saying.spanish): # for each word in the sentence
+        index_span.setdefault(word, []).append(saying) #map to the list of sayings
+    for word in getWords(saying.english):# Same logic for english words
+
+        index_eng.setdefault(word, []).append(saying)
 
 # returns sayings that contain the given spanish word
 def MeHua(word):
-    return spanish_index.get(word.lower(), [])
+    return index_span.get(word.lower(), [])
 
 # returns sayings that contain the given english word
 def WithWord(word):
-    return english_index.get(word.lower(), [])
+    return index_eng.get(word.lower(), [])
 
 #for test cases here is a list of spanish sayings with their english translations
 if __name__ == "__main__":
@@ -231,7 +233,7 @@ if __name__ == "__main__":
 # test cases
     for s in sayings:
         tree.insert(s.spanish, s)
-        index_saying(s)
+        indexSaying(s)
 
     print("Get function:")
     print(tree.get("Ojos que no ven, corazón que no siente"))
