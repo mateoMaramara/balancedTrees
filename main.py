@@ -1,4 +1,4 @@
-# Mateo Maramara and 
+# Mateo Maramara and Eric Chae
 # ICS311 Assignment 2
 # This code uses a red black tree with a running time of O(log n) for insertions, deletions, and lookups.
 # Instead of using ʻōlelo noʻeau, I used the tree to store Spanish sayings and their English translations the same way.
@@ -114,32 +114,33 @@ class RBTree:
         y.left = x # set x as left child of y
         x.parent = y #update pointer for x
 
-#rotate left method to keep red black properties
+#rotate right method to keep red black properties
     def rRight(self, x):
-        y = x.left
-        x.left = y.right
+        y = x.left # get left child of x
+        x.left = y.right # assign y’s right subtree as x’s left subtree
         if y.right is not None:
-            y.right.parent = x
-        y.parent = x.parent
+            y.right.parent = x # update parent pointer of y’s right child to x
+        y.parent = x.parent # set y's parent to x's parent
         if x.parent is None:
-            self.root = y
+            self.root = y # if x is root, y becomes new root
         elif x == x.parent.right:
-            x.parent.right = y
+            x.parent.right = y # if x is right child, y replaces x as right child
         else:
-            x.parent.left = y
-        y.right = x
-        x.parent = y
+            x.parent.left = y # if x is left child, y replaces x as left child
+        y.right = x # make x the right child of y
+        x.parent = y # update x's parent to y
 
+    # search for a node by key and return its value (Saying object)
     def get(self, key):
         node = self.root
         while node:
             if key < node.key:
-                node = node.left
+                node = node.left # go left if key is smaller
             elif key > node.key:
-                node = node.right
+                node = node.right # go right if key is larger
             else:
-                return node.value
-        return None
+                return node.value # key found, return its value
+        return None # not found, return None
 
     #returns true if key exists in the tree
     def member(self, key):
@@ -149,18 +150,18 @@ class RBTree:
     def first(self):
         node = self.root
         if not node:
-            return None
+            return None # empty tree
         while node.left:
-            node = node.left
+            node = node.left # go as far left as possible
         return node.value
 
     #returns the last element with the largest key(spanish sentence)
     def last(self):
         node = self.root
         if not node:
-            return None
+            return None # empty tree
         while node.right:
-            node = node.right
+            node = node.right # go as far right as possible
         return node.value
 
     # returns the saying just before the current key
@@ -169,39 +170,43 @@ class RBTree:
         pred = None
         while current:
             if key > current.key:
-                pred = current
+                pred = current # update predecessor
                 current = current.right
             else:
                 current = current.left
         return pred.value if pred else None
-   
+
     # returns the saying just after the current key
     def successor(self, key):
         current = self.root
         succ = None
         while current:
             if key < current.key:
-                succ = current
+                succ = current # update successor
                 current = current.left
             else:
                 current = current.right
         return succ.value if succ else None
 
+# helper function to break text into lowercase words
 def get_words(text):
     return text.lower().split()
 
-spanish_index = {}
-english_index = {}
+spanish_index = {} # dictionary to store spanish word -> sayings
+english_index = {} # dictionary to store english word -> sayings
 
+# adds words from saying to the index for fast word-based lookup
 def index_saying(saying):
     for word in get_words(saying.spanish):
         spanish_index.setdefault(word, []).append(saying)
     for word in get_words(saying.english):
         english_index.setdefault(word, []).append(saying)
-# returns 
+
+# returns sayings that contain the given spanish word
 def MeHua(word):
     return spanish_index.get(word.lower(), [])
 
+# returns sayings that contain the given english word
 def WithWord(word):
     return english_index.get(word.lower(), [])
 
